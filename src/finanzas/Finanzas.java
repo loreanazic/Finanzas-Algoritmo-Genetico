@@ -149,13 +149,13 @@ public class Finanzas {
     }
     
     public void porcentajeRuleta(int filas){
-       
+        fitnnesTotal=0;
         for (int i = 0; i < filas; i++) {
             fitnnesTotal=fitnnesTotal+x[i][fondos.size()];
         }
         System.out.println(" --Porcentaje del individuo en la Ruleta-- ");
         for (int i = 0; i < filas; i++) {
-            proporcionRuleta[i]=numeroDecimales(x[i][fondos.size()]/numeroDecimales(fitnnesTotal, 2), 2);
+            proporcionRuleta[i]=numeroDecimales((x[i][fondos.size()])/numeroDecimales(fitnnesTotal, 2), 3);
             System.out.println(i+" "+proporcionRuleta[i]);
         }
               
@@ -170,7 +170,7 @@ public class Finanzas {
         System.out.println(" --------% Ruleta--------- ");
         do {           
             contador=0;
-            double numero =  numeroDecimales((Math.random() * 1),2);
+            double numero =  numeroDecimales((Math.random() * 1),3);
             System.out.println(numero);
             for (int i = 0; i < proporcionRuleta.length; i++) {
                 contador=contador+proporcionRuleta[i];
@@ -201,16 +201,26 @@ public class Finanzas {
     
     public void cruze(){
         int vuelta=0;
-        double alfa=0.3;
+        double alfa=numeroDecimales(Math.random()*1,2);
         
         for (int i = cantCruzar; i < 20; i++) {
-            for (int j = 0; j < fondos.size(); j++) {
-                x[i][j]=numeroDecimales((x[parejas[vuelta][0]][j]*alfa)+(x[parejas[vuelta][1]][j]*(1-alfa)), 2);
+            if ((i % 2)==0) {
+                alfa=numeroDecimales(Math.random()*1,2);
+                //System.out.println("1. alfa "+alfa);
+            }else{
+               // System.out.println("2. alfa "+alfa);
             }
-            corregirHijo(i);
-            alfa=1-alfa;
+            for (int j = 0; j < fondos.size(); j++) {
+               // System.out.println("x1 "+x[parejas[vuelta][0]][j]+" x2 "+x[parejas[vuelta][1]][j]);
+                double resul=(x[parejas[vuelta][0]][j]*alfa)+(x[parejas[vuelta][1]][j]*(1-alfa));
+               // System.out.println("resultado---> "+ resul);
+                x[i][j]=numeroDecimales((x[parejas[vuelta][0]][j]*alfa)+(x[parejas[vuelta][1]][j]*(1-alfa)), 3);
+            }
+            corregirHijo(i); 
+            alfa=numeroDecimales(1-alfa, 2);
             if ((i % 2)!=0) {
                 vuelta++; 
+               // System.out.println("-vuelta "+vuelta);
             }
         }
     
@@ -241,6 +251,30 @@ public class Finanzas {
         
     }
     
+    public void mutacion(){
+        for (int j = 0; j < 3; j++) {
+            int fila=(int) ((Math.random() * 19)+1);
+            int columna= (int) ((Math.random() * 4));
+            double valorTotal=0.0;
+            double valorNuevo=0.0;
+            for (int i = 0; i < fondos.size(); i++) {
+                valorTotal=valorTotal+x[fila][i];
+            }
+
+            if (valorTotal<1) {
+                valorNuevo=((Math.random() * (1-valorTotal)));
+                x[fila][columna]=numeroDecimales(valorNuevo, 2);
+            }else{
+                valorNuevo=((Math.random() * (x[fila][columna])));
+                x[fila][columna]=numeroDecimales(x[fila][columna]-valorNuevo,3);
+            }
+            x[fila][fondos.size()]=numeroDecimales(fitness(fila),2);
+
+            System.out.println("\n ---- Individuo Mutado ---- ");
+            imprimirIndividuo(fila);
+        }
+    }
+    
     public void imprimirPoblacion(String titulo, int filas){
         System.out.println(titulo);
         for (int i = 0; i < filas; i++) {
@@ -268,13 +302,21 @@ public class Finanzas {
         programa.insercionDirecta(20);
         System.out.println(" ");
         programa.imprimirPoblacion("Ordenar por fitness",20);
-        programa.ruleta();
-        programa.cruze();
-        System.out.println(" ");
-        programa.imprimirPoblacion(" ------Poblacion despues del cruze--------",20);
-        programa.insercionDirecta(20);
-        System.out.println(" ");
-        programa.imprimirPoblacion(" --------Ordenar por fitness------- ",20);
+        int var=0;
+        do {            
+            programa.ruleta();
+            programa.cruze();
+            //System.out.println(" ");
+            //programa.imprimirPoblacion(" ------Poblacion despues del cruze--------",20);
+            programa.insercionDirecta(20);
+            System.out.println(" ");
+            programa.imprimirPoblacion(" --------Ordenar por fitness------- ",20);
+            programa.mutacion();
+            programa.insercionDirecta(20);
+            var++;
+        } while (var<10);
+        
+        programa.imprimirPoblacion(" --------Poblacion final------- ",20);
     }
     
 }
