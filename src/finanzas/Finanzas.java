@@ -17,7 +17,7 @@ public class Finanzas {
 
     Double [][] x; 
     ArrayList<fondoMonetario> fondos = new ArrayList<>();
-    static int cantCruzar=10;
+    static int cantCruzar=50;
     double fitnnesTotal=0;
     double[] proporcionRuleta;
     int[][] parejas;
@@ -26,65 +26,70 @@ public class Finanzas {
     Finanzas(){     
         /*iniciando datos fondos*/
         Double[] c=new Double[4];
-        c[0]=0.00041332; //APIUX
-        c[1]=0.00031971; //PRPFX
-        c[2]=-0.00000410; //MPERX
-        c[3]=0.00039653; //AFFIX
-        fondoMonetario APIIX= new fondoMonetario("APIIX", 0.00328, 0.00042, c); 
+        c[0]=0.00069412; //APIUX
+        c[1]=0.00054303; //PRPFX
+        c[2]=0.00051542; //MPERX
+        c[3]=0.00069178; //AFFIX
+        fondoMonetario APIIX= new fondoMonetario("APIIX", 0.00245, 0.00070, c); 
         fondos.add(APIIX);
         
-        c[0]=0.00041332; //APIIX
-        c[1]=0.00031760; //PRPFX
-        c[2]=0.00000201; //MPERX
-        c[3]=0.00039417; //AFFIX
-        fondoMonetario APIUX= new fondoMonetario("APIUX", 0.01490, 0.00039, c);
+           
+        c[0]=0.00069766; //APIIX
+        c[1]=0.00054091; //PRPFX
+        c[2]=0.00051147; //MPERX
+        c[3]=0.00069231; //AFFIX
+        fondoMonetario APIUX= new fondoMonetario("APIUX", 0.02064, 0.00070, c);
         fondos.add(APIUX);
         
-        c[0]=0.00031971; //APIIX
-        c[1]=0.00031760; //APIUX
-        c[2]=0.00021441; //MPERX
-        c[3]=0.00030892; //AFFIX
-        fondoMonetario PRPFX= new fondoMonetario("PRPFX", 0.00233, 0.00119, c);
+        
+        c[0]=0.00054303; //APIIX
+        c[1]=0.00054091; //APIUX
+        c[2]=0.00127306; //MPERX
+        c[3]=0.00053507; //AFFIX
+        fondoMonetario PRPFX= new fondoMonetario("PRPFX", 0.00097, 0.00153, c);
         fondos.add(PRPFX);
         
-        c[0]=-0.00000410; //APIIX
-        c[1]=0.00000201; //APIUX
-        c[2]=0.00021441; //PRPFX
-        c[3]=-0.00001569; //AFFIX
+        
+        c[0]=0.00051542; //APIIX
+        c[1]=0.00051147; //APIUX
+        c[2]=0.00127306; //PRPFX
+        c[3]=0.00050670; //AFFIX
         fondoMonetario MPERX= new fondoMonetario("MPERX", -0.00317, 0.00141, c);
         fondos.add(MPERX);
         
-        c[0]=0.00039653; //APIIX
-        c[1]=0.00039417; //APIUX
-        c[2]=0.00030892; //PRPFX
-        c[3]=-0.00001569; //MPERX
-        fondoMonetario AFFIX= new fondoMonetario("AFFIX", 0.00251, 0.00040, c);
+   
+        c[0]=0.00069178; //APIIX
+        c[1]=0.00069231; //APIUX
+        c[2]=0.00053507; //PRPFX
+        c[3]=0.00050670; //MPERX
+        fondoMonetario AFFIX= new fondoMonetario("AFFIX", 0.00170, 0.00069, c);
         fondos.add(AFFIX);
         
-        x = new Double[20][6]; //filas*columnas
+        
+        x = new Double[100][6]; //filas*columnas
         proporcionRuleta= new double[cantCruzar];
         parejas= new int[cantCruzar/2][2];
     }
     
     public void poblacionInicial(){
         double rango; 
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 100; i++) {
             rango=1;
             for (int j = 0; j < fondos.size(); j++) {
                 if (rango>0 && j!=(fondos.size()-1)) {
-                   double numero =  numeroDecimales((Math.random() * rango),2);
+                   double numero =  numeroDecimales((Math.random() * rango),4);
                    x[i][j]=numero;
                    rango=rango-numero; 
                 }else{
                     if (j==fondos.size()-1) {
-                        x[i][j]=numeroDecimales(rango,2);
+                        x[i][j]=numeroDecimales(rango,4);
                     }else{
                         x[i][j]=(double) 0;
                     }
                     
                 }   
             }
-            x[i][fondos.size()]=numeroDecimales(fitness(i),2); //fitness   
+            x[i][fondos.size()]=numeroDecimales(fitness(i),4); //fitness   
         }   
     }
     
@@ -214,7 +219,7 @@ public class Finanzas {
                // System.out.println("x1 "+x[parejas[vuelta][0]][j]+" x2 "+x[parejas[vuelta][1]][j]);
                 double resul=(x[parejas[vuelta][0]][j]*alfa)+(x[parejas[vuelta][1]][j]*(1-alfa));
                // System.out.println("resultado---> "+ resul);
-                x[i][j]=numeroDecimales((x[parejas[vuelta][0]][j]*alfa)+(x[parejas[vuelta][1]][j]*(1-alfa)), 3);
+                x[i][j]=numeroDecimales((x[parejas[vuelta][0]][j]*alfa)+(x[parejas[vuelta][1]][j]*(1-alfa)), 4);
             }
             corregirHijo(i); 
             alfa=numeroDecimales(1-alfa, 2);
@@ -230,7 +235,7 @@ public class Finanzas {
         double suma=0;
         
         for (int i = 0; i < fondos.size(); i++) {
-            suma=numeroDecimales(suma+x[fila][i],2);
+            suma=numeroDecimales(suma+x[fila][i],4);
         }
         
         if (suma>1) {
@@ -239,14 +244,22 @@ public class Finanzas {
             suma=numeroDecimales((suma-1)/fondos.size(),4);
             //System.out.println("suma/5: "+suma);
             for (int i = 0; i < fondos.size(); i++) {
-                x[fila][i]=numeroDecimales(x[fila][i]-suma,3);
+                x[fila][i]=numeroDecimales(x[fila][i]-suma,4);
                 if (x[fila][i]<0) {
                     x[fila][i]=0.0;
                 }
             }
+        }else{
+            if (suma<1) {
+                suma=numeroDecimales((1-suma)/fondos.size(),4);
+                //System.out.println("suma/5: "+suma);
+                for (int i = 0; i < fondos.size(); i++) {
+                    x[fila][i]=numeroDecimales(x[fila][i]+suma,4);
+                }
+            }
         }
         
-        x[fila][fondos.size()]=numeroDecimales(fitness(fila),2); //fitness
+        x[fila][fondos.size()]=numeroDecimales(fitness(fila),4); //fitness
         imprimirIndividuo(fila);
         
     }
@@ -263,12 +276,12 @@ public class Finanzas {
 
             if (valorTotal<1) {
                 valorNuevo=((Math.random() * (1-valorTotal)));
-                x[fila][columna]=numeroDecimales(valorNuevo, 2);
+                x[fila][columna]=numeroDecimales(valorNuevo, 4);
             }else{
                 valorNuevo=((Math.random() * (x[fila][columna])));
-                x[fila][columna]=numeroDecimales(x[fila][columna]-valorNuevo,3);
+                x[fila][columna]=numeroDecimales(x[fila][columna]-valorNuevo,4);
             }
-            x[fila][fondos.size()]=numeroDecimales(fitness(fila),2);
+            x[fila][fondos.size()]=numeroDecimales(fitness(fila),4);
 
             System.out.println("\n ---- Individuo Mutado ---- ");
             imprimirIndividuo(fila);
@@ -279,7 +292,11 @@ public class Finanzas {
         System.out.println(titulo);
         for (int i = 0; i < filas; i++) {
             System.out.print(i+") APIIX-> "+x[i][0]+" APIUX-> "+x[i][1]+" PRPFX-> "+x[i][2]+" MPERX-> "+x[i][3]+" AFFIX-> "+x[i][4]+" Fitness-> "+x[i][5]);
-            System.out.println(" Rendimiento-> "+numeroDecimales(rendimientoPortafolio(i), 4));
+            double rendimiento=rendimientoPortafolio(i);
+            double varianza= rendimiento/x[i][5];
+            System.out.print(" Rendimiento-> "+numeroDecimales(rendimiento, 4));
+            System.out.println(" VarianzaCalculada-> "+numeroDecimales(varianza, 4));
+            
         }
     }
     
@@ -298,25 +315,25 @@ public class Finanzas {
     public static void main(String[] args) {
         Finanzas programa=new Finanzas(); 
         programa.poblacionInicial();
-        programa.imprimirPoblacion("Poblacion Inicial",20);
-        programa.insercionDirecta(20);
+        programa.imprimirPoblacion("Poblacion Inicial",100);
+        programa.insercionDirecta(100);
         System.out.println(" ");
-        programa.imprimirPoblacion("Ordenar por fitness",20);
+        programa.imprimirPoblacion("Ordenar por fitness",100);
         int var=0;
         do {            
             programa.ruleta();
             programa.cruze();
             //System.out.println(" ");
             //programa.imprimirPoblacion(" ------Poblacion despues del cruze--------",20);
-            programa.insercionDirecta(20);
+            programa.insercionDirecta(100);
             System.out.println(" ");
-            programa.imprimirPoblacion(" --------Ordenar por fitness------- ",20);
+            programa.imprimirPoblacion(" --------Ordenar por fitness------- ",100);
             programa.mutacion();
-            programa.insercionDirecta(20);
+            programa.insercionDirecta(100);
             var++;
-        } while (var<10);
+        } while (parada<100);
         
-        programa.imprimirPoblacion(" --------Poblacion final------- ",20);
+        programa.imprimirPoblacion(" --------Poblacion final------- ",100);
     }
     
 }
