@@ -5,9 +5,13 @@
  */
 package finanzas;
 
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Scanner;
+import jdk.nashorn.internal.runtime.ECMAErrors;
 
 /**
  *
@@ -129,6 +133,14 @@ public class Finanzas {
                 }
             }
         }
+        /*System.out.println("----------FIlaa "+fila);
+        for (int i = 0; i < fondos.size(); i++) {
+            for (int j = 0; j < fondos.size(); j++) {
+                System.out.print(matriz[i][j]+"  ");
+            }
+            System.out.println();
+        }
+        System.out.println("-------------------------Total "+Varrp);*/
         return Varrp;
     }
     
@@ -158,10 +170,10 @@ public class Finanzas {
         for (int i = 0; i < filas; i++) {
             fitnnesTotal=fitnnesTotal+x[i][fondos.size()];
         }
-        System.out.println(" --Porcentaje del individuo en la Ruleta-- ");
+        //System.out.println(" --Porcentaje del individuo en la Ruleta-- ");
         for (int i = 0; i < filas; i++) {
             proporcionRuleta[i]=numeroDecimales((x[i][fondos.size()])/numeroDecimales(fitnnesTotal, 2), 3);
-            System.out.println(i+" "+proporcionRuleta[i]);
+            //System.out.println(i+" "+proporcionRuleta[i]);
         }
               
     }
@@ -172,11 +184,11 @@ public class Finanzas {
         int vuelta=0;
         int numPareja=0;
         porcentajeRuleta(cantCruzar);
-        System.out.println(" --------% Ruleta--------- ");
+        //System.out.println(" --------% Ruleta--------- ");
         do {           
             contador=0;
             double numero =  numeroDecimales((Math.random() * 1),3);
-            System.out.println(numero);
+           // System.out.println(numero);
             for (int i = 0; i < proporcionRuleta.length; i++) {
                 contador=contador+proporcionRuleta[i];
                 if (contador>=numero) {
@@ -197,18 +209,18 @@ public class Finanzas {
             
         } while (vuelta<(cantCruzar/2));
         
-        System.out.println(" ---Parejas a cruzar--- ");
-        for (int i = 0; i < (cantCruzar/2); i++) {
+        //System.out.println(" ---Parejas a cruzar--- ");
+       /* for (int i = 0; i < (cantCruzar/2); i++) {
             System.out.println(i+" pareja "+parejas[i][0]+" / "+parejas[i][1]);
-        }
+        }*/
     
     }
     
     public void cruze(){
         int vuelta=0;
         double alfa=numeroDecimales(Math.random()*1,2);
-        
-        for (int i = cantCruzar; i < 20; i++) {
+        System.out.print("-------------------------------Cruce------------------------------");
+        for (int i = cantCruzar; i < 100; i++) {
             if ((i % 2)==0) {
                 alfa=numeroDecimales(Math.random()*1,2);
                 //System.out.println("1. alfa "+alfa);
@@ -234,14 +246,21 @@ public class Finanzas {
     public void corregirHijo(int fila){
         double suma=0;
         
+        System.out.println("Viejo individuo");
+        imprimirIndividuo(fila);
+        int ceros=0;
         for (int i = 0; i < fondos.size(); i++) {
             suma=numeroDecimales(suma+x[fila][i],4);
+            if (x[fila][i]==0) {
+                ceros++;
+            }
         }
-        
+        System.out.println("Fila: "+fila+" suma: "+suma);
         if (suma>1) {
+            System.out.println(">suma: "+(suma-1)/(fondos.size()-ceros));
             /*imprimirIndividuo(fila);
             System.out.println("suma: "+suma);*/
-            suma=numeroDecimales((suma-1)/fondos.size(),4);
+            suma=numeroDecimales((suma-1)/(fondos.size()-ceros),8);
             //System.out.println("suma/5: "+suma);
             for (int i = 0; i < fondos.size(); i++) {
                 x[fila][i]=numeroDecimales(x[fila][i]-suma,4);
@@ -251,8 +270,8 @@ public class Finanzas {
             }
         }else{
             if (suma<1) {
-                suma=numeroDecimales((1-suma)/fondos.size(),4);
-                //System.out.println("suma/5: "+suma);
+                suma=numeroDecimales((1-suma)/(fondos.size()-ceros),4);
+                System.out.println("<suma: "+(1-suma)/(fondos.size()-ceros));
                 for (int i = 0; i < fondos.size(); i++) {
                     x[fila][i]=numeroDecimales(x[fila][i]+suma,4);
                 }
@@ -260,27 +279,22 @@ public class Finanzas {
         }
         
         x[fila][fondos.size()]=numeroDecimales(fitness(fila),4); //fitness
+        System.out.println("Nuevo individuo");
         imprimirIndividuo(fila);
         
     }
     
     public void mutacion(){
         for (int j = 0; j < 3; j++) {
-            int fila=(int) ((Math.random() * 19)+1);
+            int fila=(int) ((Math.random() * 99)+1);
             int columna= (int) ((Math.random() * 4));
             double valorTotal=0.0;
             double valorNuevo=0.0;
-            for (int i = 0; i < fondos.size(); i++) {
-                valorTotal=valorTotal+x[fila][i];
-            }
-
-            if (valorTotal<1) {
-                valorNuevo=((Math.random() * (1-valorTotal)));
-                x[fila][columna]=numeroDecimales(valorNuevo, 4);
-            }else{
-                valorNuevo=((Math.random() * (x[fila][columna])));
-                x[fila][columna]=numeroDecimales(x[fila][columna]-valorNuevo,4);
-            }
+             
+            valorNuevo=((Math.random() * (x[fila][columna])));
+            x[fila][columna]=numeroDecimales(x[fila][columna]+valorNuevo,4);
+            corregirHijo(fila);
+            
             x[fila][fondos.size()]=numeroDecimales(fitness(fila),4);
 
             System.out.println("\n ---- Individuo Mutado ---- ");
@@ -294,10 +308,21 @@ public class Finanzas {
             System.out.print(i+") APIIX-> "+x[i][0]+" APIUX-> "+x[i][1]+" PRPFX-> "+x[i][2]+" MPERX-> "+x[i][3]+" AFFIX-> "+x[i][4]+" Fitness-> "+x[i][5]);
             double rendimiento=rendimientoPortafolio(i);
             double varianza= rendimiento/x[i][5];
-            System.out.print(" Rendimiento-> "+numeroDecimales(rendimiento, 4));
-            System.out.println(" VarianzaCalculada-> "+numeroDecimales(varianza, 4));
+            System.out.print(" Rendimiento-> "+numeroDecimales(rendimiento, 6));
+            System.out.println(" VarianzaCalculada-> "+numeroDecimales(varianza, 8));
             
         }
+    }
+    
+    public void imroimirValoresGrafica(String titulo, int filas){
+        System.out.println(titulo);
+        for (int i = 0; i < filas; i++) {
+            double rendimiento=rendimientoPortafolio(i);
+            double varianza= rendimiento/x[i][5];
+            System.out.print(numeroDecimales(rendimiento, 6)); // rendimiento
+            System.out.print(";");
+            System.out.println(numeroDecimales(varianza, 10)); // varianza
+        }  
     }
     
     public void imprimirIndividuo(int i){
@@ -312,6 +337,49 @@ public class Finanzas {
         return bd.doubleValue();
     }
     
+    public void escribirSalida(int filas, String titulo){
+        FileWriter fichero = null;
+        PrintWriter pw = null;
+        FileWriter fichero2 = null;
+        PrintWriter pw2 = null;
+        try
+        {
+            fichero2 = new FileWriter("Salida del algoritmo/"+titulo+"RendimientoVarianza.txt");
+            pw2 = new PrintWriter(fichero2);
+            
+            fichero = new FileWriter("Salida del algoritmo/"+titulo+"PorcentajesActivos.csv");
+            pw = new PrintWriter(fichero);
+      
+        for (int i = 0; i < filas; i++) {
+            pw.print(i+") APIIX-> "+x[i][0]+" APIUX-> "+x[i][1]+" PRPFX-> "+x[i][2]+" MPERX-> "+x[i][3]+" AFFIX-> "+x[i][4]+" Fitness-> "+x[i][5]);
+            double rendimiento=rendimientoPortafolio(i);
+            double varianza= rendimiento/x[i][5];
+            pw.print(" Rendimiento-> "+numeroDecimales(rendimiento, 6));
+            pw.println(" VarianzaCalculada-> "+numeroDecimales(varianza, 8));
+            
+            pw2.print(numeroDecimales(rendimiento, 6)); // rendimiento
+            pw2.print(";");
+            pw2.println(numeroDecimales(varianza, 10)); // varianza
+        }
+        
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+           try {
+           if (null != fichero)
+              fichero.close();
+           } catch (Exception e2) {
+              e2.printStackTrace();
+           }
+           try {
+           if (null != fichero2)
+              fichero2.close();
+           } catch (Exception e3) {
+              e3.printStackTrace();
+           }
+        }
+    }
+    
     public static void main(String[] args) {
         Finanzas programa=new Finanzas(); 
         programa.poblacionInicial();
@@ -323,17 +391,24 @@ public class Finanzas {
         do {            
             programa.ruleta();
             programa.cruze();
+            
             //System.out.println(" ");
             //programa.imprimirPoblacion(" ------Poblacion despues del cruze--------",20);
             programa.insercionDirecta(100);
             System.out.println(" ");
-            programa.imprimirPoblacion(" --------Ordenar por fitness------- ",100);
+            programa.imprimirPoblacion(" --------Ordenar por fitness------- ",50);
             programa.mutacion();
             programa.insercionDirecta(100);
             var++;
-        } while (parada<100);
+        } while (parada<700);
         
         programa.imprimirPoblacion(" --------Poblacion final------- ",100);
+        //programa.imroimirValoresGrafica(" ----Rendimiento----Varianza--- ", 100);
+        Scanner reader = new Scanner(System.in);
+        int numero = 0;
+        System.out.println("Introduce números de ejecucion del algoritmo");
+        numero = reader.nextInt();
+        programa.escribirSalida(100,"corrida"+numero);
     }
     
 }
