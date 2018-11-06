@@ -30,7 +30,7 @@ public class Finanzas {
     Finanzas(){     
         /*iniciando datos fondos*/
         Double[] c=new Double[4];
-        c[0]=0.00069412; //APIUX
+        c[0]=0.00069766; //APIUX
         c[1]=0.00054303; //PRPFX
         c[2]=0.00051542; //MPERX
         c[3]=0.00069178; //AFFIX
@@ -69,7 +69,7 @@ public class Finanzas {
         fondoMonetario AFFIX= new fondoMonetario("AFFIX", 0.00170, 0.00069, c);
         fondos.add(AFFIX);
         
-        
+        //100 individuos, 5 acciones + fitness
         x = new Double[100][6]; //filas*columnas
         proporcionRuleta= new double[cantCruzar];
         parejas= new int[cantCruzar/2][2];
