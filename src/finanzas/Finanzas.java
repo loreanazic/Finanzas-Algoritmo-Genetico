@@ -402,13 +402,13 @@ public class Finanzas {
             var++;
         } while (parada<700);
         
-        programa.imprimirPoblacion(" --------Poblacion final------- ",100);
+        programa.imprimirPoblacion(" --------Poblacion final------- ",5);
         //programa.imroimirValoresGrafica(" ----Rendimiento----Varianza--- ", 100);
         Scanner reader = new Scanner(System.in);
         int numero = 0;
         System.out.println("Introduce números de ejecucion del algoritmo");
         numero = reader.nextInt();
-        programa.escribirSalida(100,"corrida"+numero);
+        programa.escribirSalida(5,"corrida"+numero);
     }
     
 }
