@@ -69,7 +69,7 @@ public class Finanzas {
         fondoMonetario AFFIX= new fondoMonetario("AFFIX", 0.00170, 0.00069, c);
         fondos.add(AFFIX);
         
-        //100 individuos, 5 acciones + fitness
+        //100 individuos, 5 acciones + Columna del fitness
         x = new Double[100][6]; //filas*columnas
         proporcionRuleta= new double[cantCruzar];
         parejas= new int[cantCruzar/2][2];
@@ -216,22 +216,17 @@ public class Finanzas {
     
     }
     
-    public void cruze(){
+    public void cruce(){
         int vuelta=0;
         double alfa=numeroDecimales(Math.random()*1,2);
         System.out.print("-------------------------------Cruce------------------------------");
         for (int i = cantCruzar; i < 100; i++) {
             if ((i % 2)==0) {
                 alfa=numeroDecimales(Math.random()*1,2);
-                //System.out.println("1. alfa "+alfa);
-            }else{
-               // System.out.println("2. alfa "+alfa);
             }
             for (int j = 0; j < fondos.size(); j++) {
-               // System.out.println("x1 "+x[parejas[vuelta][0]][j]+" x2 "+x[parejas[vuelta][1]][j]);
-                double resul=(x[parejas[vuelta][0]][j]*alfa)+(x[parejas[vuelta][1]][j]*(1-alfa));
-               // System.out.println("resultado---> "+ resul);
-                x[i][j]=numeroDecimales((x[parejas[vuelta][0]][j]*alfa)+(x[parejas[vuelta][1]][j]*(1-alfa)), 4);
+                double result=(x[parejas[vuelta][0]][j]*alfa)+(x[parejas[vuelta][1]][j]*(1-alfa));
+                x[i][j]=numeroDecimales(result, 4);
             }
             corregirHijo(i); 
             alfa=numeroDecimales(1-alfa, 2);
@@ -354,14 +349,13 @@ public class Finanzas {
             pw.print(" APIIX-> ;"+x[i][0]+"; APIUX-> ;"+x[i][1]+"; PRPFX-> ;"+x[i][2]+"; MPERX-> ;"+x[i][3]+"; AFFIX-> ;"+x[i][4]+"; Fitness-> ;"+x[i][5]);
             double rendimiento=rendimientoPortafolio(i);
             double varianza= rendimiento/x[i][5];
-            pw.print(" Rendimiento-> "+numeroDecimales(rendimiento, 6));
-            pw.println(" VarianzaCalculada-> "+numeroDecimales(varianza, 8));
-            
+            pw.print(" ;Rendimiento->; "+numeroDecimales(rendimiento, 6));
+            pw.println(" ;VarianzaCalculada->; "+numeroDecimales(varianza, 8));
             pw2.print(numeroDecimales(rendimiento, 6)); // rendimiento
             pw2.print(";");
             pw2.print(numeroDecimales(varianza, 10)); // varianza
             pw2.print(";");
-            pw2.println(numeroDecimales(x[i][5], 10)); // fitness
+            pw2.println(numeroDecimales(x[i][5], 10));
         }
         
         } catch (Exception e) {
@@ -392,10 +386,10 @@ public class Finanzas {
         int var=0;
         do {            
             programa.ruleta();
-            programa.cruze();
+            programa.cruce();
             
             //System.out.println(" ");
-            //programa.imprimirPoblacion(" ------Poblacion despues del cruze--------",20);
+            //programa.imprimirPoblacion(" ------Poblacion despues del cruce--------",20);
             programa.insercionDirecta(100);
             System.out.println(" ");
             programa.imprimirPoblacion(" --------Ordenar por fitness------- ",50);
