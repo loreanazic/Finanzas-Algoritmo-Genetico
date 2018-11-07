@@ -1,5 +1,0 @@
-Ahora combinaremos riesgo y rendimiento, para calcular el coeficiente de
-variación, dividiendo: riesgo promedio /rendimiento promedio, este dato se puede 
-16
-interpretar como la esperanza de ganar un 1 % de rendimiento, tenemos que
-asumir un cv% de riesgo.
