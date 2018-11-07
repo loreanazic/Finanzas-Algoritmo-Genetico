@@ -353,7 +353,7 @@ public class Finanzas {
             pw.println(" ;VarianzaCalculada->; "+numeroDecimales(varianza, 8));
             pw2.print(numeroDecimales(rendimiento, 6)); // rendimiento
             pw2.print(";");
-            pw2.println(numeroDecimales(varianza, 10)); // varianza
+            pw2.print(numeroDecimales(varianza, 10)); // varianza
             pw2.print(";");
             pw2.println(numeroDecimales(x[i][5], 10));
         }
