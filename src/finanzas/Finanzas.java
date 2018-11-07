@@ -351,7 +351,7 @@ public class Finanzas {
             pw = new PrintWriter(fichero);
       
         for (int i = 0; i < filas; i++) {
-            pw.print(i+") APIIX-> "+x[i][0]+" APIUX-> "+x[i][1]+" PRPFX-> "+x[i][2]+" MPERX-> "+x[i][3]+" AFFIX-> "+x[i][4]+" Fitness-> "+x[i][5]);
+            pw.print(" APIIX-> ;"+x[i][0]+"; APIUX-> ;"+x[i][1]+"; PRPFX-> ;"+x[i][2]+"; MPERX-> ;"+x[i][3]+"; AFFIX-> ;"+x[i][4]+"; Fitness-> ;"+x[i][5]);
             double rendimiento=rendimientoPortafolio(i);
             double varianza= rendimiento/x[i][5];
             pw.print(" Rendimiento-> "+numeroDecimales(rendimiento, 6));
@@ -402,7 +402,7 @@ public class Finanzas {
             programa.mutacion();
             programa.insercionDirecta(100);
             var++;
-        } while (parada<500);
+        } while (parada<700);
         
         programa.imprimirPoblacion(" --------Poblacion final------- ",5);
         //programa.imroimirValoresGrafica(" ----Rendimiento----Varianza--- ", 100);
