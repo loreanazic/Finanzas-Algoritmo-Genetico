@@ -1,14 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package finanzas;
 
-/**
- *
- * @author loreanaisabel
- */
 public class fondoMonetario {
     String nombre;
     /*Float x; incognita del problema, cuanto invertir?*/
@@ -26,8 +17,5 @@ public class fondoMonetario {
             this.covarianza[i]=covarianza[i];
         }
         
-    }
-    
-    
-    
+    }    
 }
