@@ -359,7 +359,9 @@ public class Finanzas {
             
             pw2.print(numeroDecimales(rendimiento, 6)); // rendimiento
             pw2.print(";");
-            pw2.println(numeroDecimales(varianza, 10)); // varianza
+            pw2.print(numeroDecimales(varianza, 10)); // varianza
+            pw2.print(";");
+            pw2.println(numeroDecimales(x[i][5], 10)); // fitness
         }
         
         } catch (Exception e) {
@@ -400,7 +402,7 @@ public class Finanzas {
             programa.mutacion();
             programa.insercionDirecta(100);
             var++;
-        } while (parada<700);
+        } while (parada<500);
         
         programa.imprimirPoblacion(" --------Poblacion final------- ",5);
         //programa.imroimirValoresGrafica(" ----Rendimiento----Varianza--- ", 100);
